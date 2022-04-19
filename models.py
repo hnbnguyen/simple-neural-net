@@ -27,6 +27,7 @@ class PerceptronModel(object):
         Returns: a node containing a single number (the score)
         """
         "*** YOUR CODE HERE ***"
+        return nn.DotProduct(self.w, x)
 
     def get_prediction(self, x):
         """
@@ -35,12 +36,24 @@ class PerceptronModel(object):
         Returns: 1 or -1
         """
         "*** YOUR CODE HERE ***"
+        return 1 if (nn.as_scalar(self.run(x)) >= 0) else -1
 
     def train(self, dataset):
         """
         Train the perceptron until convergence.
         """
         "*** YOUR CODE HERE ***"
+        batch_size = 1
+
+        flag = True
+        while flag:
+            flag = False
+            for a, b in dataset.iterate_once(batch_size):
+                result = self.get_prediction(a)
+                # not yet converge, continue the while loop
+                if result != nn.as_scalar(b):
+                    self.w.update(nn.Constant((b) * a.data), 1)
+                    flag = True
 
 class RegressionModel(object):
     """
@@ -98,6 +111,19 @@ class DigitClassificationModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
+        self.learning_rate = 0.1
+
+        self.w1 = nn.Parameter(784, 256)
+        self.b1 = nn.Parameter(1, 256)
+
+        self.w2 = nn.Parameter(256, 128)
+        self.b2 = nn.Parameter(1, 128)
+
+        self.w3 = nn.Parameter(128, 64)
+        self.b3 = nn.Parameter(1, 64)
+
+        self.w4 = nn.Parameter(64, 10)
+        self.b4 = nn.Parameter(1, 10)
 
     def run(self, x):
         """
