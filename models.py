@@ -121,6 +121,7 @@ class RegressionModel(object):
         return nn.SquareLoss(predictions,y)
 
     def train(self, dataset):
+        # THIS MUST BE CHANGED !!! 
         batch_size = 50
         loss = float('inf')
         while loss >= .015:
@@ -131,6 +132,7 @@ class RegressionModel(object):
                 loss = nn.as_scalar(loss)
                 for i in range(len(self.params)):
                     self.params[i].update(grads[i], -self.lr)
+        # THIS MUST BE CHANGED !!! 
 
 class DigitClassificationModel(object):
     """
