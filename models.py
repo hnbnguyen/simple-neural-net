@@ -43,11 +43,13 @@ class PerceptronModel(object):
         Train the perceptron until convergence.
         """
         "*** YOUR CODE HERE ***"
+        #initialize a batch size of 1 for all training run
         batch_size = 1
 
         flag = True
         while flag:
             flag = False
+            # checking the result from the current parameters 
             for a, b in dataset.iterate_once(batch_size):
                 result = self.get_prediction(a)
                 # not yet converge, continue the while loop
