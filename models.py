@@ -89,21 +89,6 @@ class RegressionModel(object):
             A node with shape (batch_size x 1) containing predicted y-values
         """
         "*** YOUR CODE HERE ***"
-        input_vector = x 
-        first_layer = nn.ReLU(nn.AddBias(nn.Linear(input_vector, self.w1), self.b1))
-        second_layer = nn.ReLU(nn.AddBias(nn.Linear(first_layer, self.w2), self.b2))
-
-    def get_loss(self, x, y):
-        """
-        Computes the loss for a batch of examples.
-
-        Inputs:
-            x: a node with shape (batch_size x 1)
-            y: a node with shape (batch_size x 1), containing the true y-values
-                to be used for training
-        Returns: a loss node
-        """
-        "*** YOUR CODE HERE ***"
         # Layer 1
         input = x
         input_lin = nn.Linear(input, self.w1)
@@ -121,11 +106,29 @@ class RegressionModel(object):
 
         return output_3
 
-    def train(self, dataset):
+    def get_loss(self, x, y):
         """
-        Trains the model.
+        Computes the loss for a batch of examples.
+
+        Inputs:
+            x: a node with shape (batch_size x 1)
+            y: a node with shape (batch_size x 1), containing the true y-values
+                to be used for training
+        Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
+
+    def train(self, dataset):
+        batch_size = 50
+        loss = float('inf')
+        while loss >= .015:
+            for x, y in dataset.iterate_once(batch_size):
+                loss = self.get_loss(x, y)
+                print(nn.as_scalar(loss))
+                grads = nn.gradients(loss, self.params)
+                loss = nn.as_scalar(loss)
+                for i in range(len(self.params)):
+                    self.params[i].update(grads[i], -self.lr)
 
 class DigitClassificationModel(object):
     """
