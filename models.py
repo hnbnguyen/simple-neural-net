@@ -117,6 +117,8 @@ class RegressionModel(object):
         Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
+        predictions = self.run(x)
+        return nn.SquareLoss(predictions,y)
 
     def train(self, dataset):
         batch_size = 50
@@ -177,6 +179,27 @@ class DigitClassificationModel(object):
         """
         "*** YOUR CODE HERE ***"
 
+        #Hidden Layer One
+        trans_1 = nn.Linear(x, self.w1)
+        trans_bias1 = nn.AddBias(trans_1, self.b1)
+        layer1 = nn.ReLU(trans_bias1)
+
+        #Hidden Layer Two
+        trans_2 = nn.Linear(layer1, self.w2)
+        trans_bias2 = nn.AddBias(trans_2, self.b2)
+        layer2 = nn.ReLU(trans_bias2)
+
+        #Hidden Layer Three
+        trans_3 = nn.Linear(layer2, self.w3)
+        trans_bias3 = nn.AddBias(trans_3, self.b3)
+        layer3 = nn.ReLU(trans_bias3)
+
+        #Output vector without ReLu
+        output_layer = nn.AddBias(nn.Linear(layer3, self.w4), self.b4)
+
+        #Return the output layer
+        return output_layer
+
     def get_loss(self, x, y):
         """
         Computes the loss for a batch of examples.
@@ -191,6 +214,9 @@ class DigitClassificationModel(object):
         Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
+
+        loss_node = self.run(x)
+        return nn.SoftmaxLoss(loss_node, y)
 
     def train(self, dataset):
         """
