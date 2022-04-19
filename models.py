@@ -66,6 +66,18 @@ class RegressionModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
+        # based on the 3-layer deeper network architecture in Neural Network Tips
+        self.learning_rate = 0.01
+        self.batch_size = 25
+
+        self.w1 = nn.Parameter(1, 64)
+        self.b1 = nn.Parameter(1, 64)
+
+        self.w2 = nn.Parameter(64, 128)
+        self.b2 = nn.Parameter(1, 128)
+        # output layer
+        self.w3 = nn.Parameter(128, 1)
+        self.b3 = nn.Parameter(1, 1)
 
     def run(self, x):
         """
@@ -77,6 +89,9 @@ class RegressionModel(object):
             A node with shape (batch_size x 1) containing predicted y-values
         """
         "*** YOUR CODE HERE ***"
+        input_vector = x 
+        first_layer = nn.ReLU(nn.AddBias(nn.Linear(input_vector, self.w1), self.b1))
+        second_layer = nn.ReLU(nn.AddBias(nn.Linear(first_layer, self.w2), self.b2))
 
     def get_loss(self, x, y):
         """
