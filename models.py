@@ -54,7 +54,7 @@ class PerceptronModel(object):
                 result = self.get_prediction(a)
                 # not yet converge, continue the while loop
                 if result != nn.as_scalar(b):
-                    self.w.update(nn.Constant((b) * a.data), 1)
+                    self.w.update(nn.as_scalar(b), a)
                     flag = True
 
 class RegressionModel(object):
