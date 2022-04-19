@@ -104,8 +104,27 @@ class RegressionModel(object):
         Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
+<<<<<<< HEAD
         predictions = self.run(x)
         return nn.SquareLoss(predictions, y)
+=======
+        # Layer 1
+        input = x
+        input_lin = nn.Linear(input, self.w1)
+        input_bias = nn.AddBias(input_lin, self.b1)
+        output_1 = nn.ReLU(input_bias)
+
+        # Layer 2
+        input_lin2 = nn.Linear(output_1, self.w2)
+        input_bias2 = nn.AddBias(input_lin2, self.b2)
+        output_2 = nn.ReLU(input_bias2)
+
+        # Layer 3 (output)
+        input_lin3 = nn.Linear(output_2, self.w3)
+        output_3 = nn.AddBias(input_lin3, self.b3)
+
+        return output_3
+>>>>>>> 402c5af18ef3c603abb3903ea82b63399e5611a4
 
     def train(self, dataset):
         """
@@ -130,6 +149,19 @@ class DigitClassificationModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
+        self.learning_rate = 0.1
+
+        self.w1 = nn.Parameter(784, 256)
+        self.b1 = nn.Parameter(1, 256)
+
+        self.w2 = nn.Parameter(256, 128)
+        self.b2 = nn.Parameter(1, 128)
+
+        self.w3 = nn.Parameter(128, 64)
+        self.b3 = nn.Parameter(1, 64)
+
+        self.w4 = nn.Parameter(64, 10)
+        self.b4 = nn.Parameter(1, 10)
 
     def run(self, x):
         """
