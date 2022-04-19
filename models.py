@@ -104,6 +104,22 @@ class RegressionModel(object):
         Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
+        # Layer 1
+        input = x
+        input_lin = nn.Linear(input, self.w1)
+        input_bias = nn.AddBias(input_lin, self.b1)
+        output_1 = nn.ReLU(input_bias)
+
+        # Layer 2
+        input_lin2 = nn.Linear(output_1, self.w2)
+        input_bias2 = nn.AddBias(input_lin2, self.b2)
+        output_2 = nn.ReLU(input_bias2)
+
+        # Layer 3 (output)
+        input_lin3 = nn.Linear(output_2, self.w3)
+        output_3 = nn.AddBias(input_lin3, self.b3)
+
+        return output_3
 
     def train(self, dataset):
         """
