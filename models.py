@@ -68,7 +68,6 @@ class RegressionModel(object):
         "*** YOUR CODE HERE ***"
         # based on the 3-layer deeper network architecture in Neural Network Tips
         self.learning_rate = 0.01
-        self.batch_size = 25
 
         self.w1 = nn.Parameter(1, 64)
         self.b1 = nn.Parameter(1, 64)
@@ -78,6 +77,8 @@ class RegressionModel(object):
         # output layer
         self.w3 = nn.Parameter(128, 1)
         self.b3 = nn.Parameter(1, 1)
+
+        self.params = [self.w1, self.b1, self.w2, self.b2, self.w3, self.b3]
 
     def run(self, x):
         """
@@ -123,15 +124,15 @@ class RegressionModel(object):
     def train(self, dataset):
         # THIS MUST BE CHANGED !!! 
         batch_size = 50
+
         loss = float('inf')
-        while loss >= .015:
+        while loss >= .01:
             for x, y in dataset.iterate_once(batch_size):
                 loss = self.get_loss(x, y)
-                print(nn.as_scalar(loss))
-                grads = nn.gradients(loss, self.params)
+                grads = nn.gradients(self.params, loss)
                 loss = nn.as_scalar(loss)
                 for i in range(len(self.params)):
-                    self.params[i].update(grads[i], -self.lr)
+                    self.params[i].update(-self.learning_rate, grads[i])
         # THIS MUST BE CHANGED !!! 
 
 class DigitClassificationModel(object):
