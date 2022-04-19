@@ -43,11 +43,13 @@ class PerceptronModel(object):
         Train the perceptron until convergence.
         """
         "*** YOUR CODE HERE ***"
+        #initialize a batch size of 1 for all training run
         batch_size = 1
 
         flag = True
         while flag:
             flag = False
+            # checking the result from the current parameters 
             for a, b in dataset.iterate_once(batch_size):
                 result = self.get_prediction(a)
                 # not yet converge, continue the while loop
@@ -64,6 +66,18 @@ class RegressionModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
+        # based on the 3-layer deeper network architecture in Neural Network Tips
+        self.learning_rate = 0.01
+        self.batch_size = 25
+
+        self.w1 = nn.Parameter(1, 64)
+        self.b1 = nn.Parameter(1, 64)
+
+        self.w2 = nn.Parameter(64, 128)
+        self.b2 = nn.Parameter(1, 128)
+        # output layer
+        self.w3 = nn.Parameter(128, 1)
+        self.b3 = nn.Parameter(1, 1)
 
     def run(self, x):
         """
@@ -75,6 +89,9 @@ class RegressionModel(object):
             A node with shape (batch_size x 1) containing predicted y-values
         """
         "*** YOUR CODE HERE ***"
+        input_vector = x 
+        first_layer = nn.ReLU(nn.AddBias(nn.Linear(input_vector, self.w1), self.b1))
+        second_layer = nn.ReLU(nn.AddBias(nn.Linear(first_layer, self.w2), self.b2))
 
     def get_loss(self, x, y):
         """
@@ -87,6 +104,22 @@ class RegressionModel(object):
         Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
+        # Layer 1
+        input = x
+        input_lin = nn.Linear(input, self.w1)
+        input_bias = nn.AddBias(input_lin, self.b1)
+        output_1 = nn.ReLU(input_bias)
+
+        # Layer 2
+        input_lin2 = nn.Linear(output_1, self.w2)
+        input_bias2 = nn.AddBias(input_lin2, self.b2)
+        output_2 = nn.ReLU(input_bias2)
+
+        # Layer 3 (output)
+        input_lin3 = nn.Linear(output_2, self.w3)
+        output_3 = nn.AddBias(input_lin3, self.b3)
+
+        return output_3
 
     def train(self, dataset):
         """
