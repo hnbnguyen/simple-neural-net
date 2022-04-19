@@ -117,6 +117,8 @@ class RegressionModel(object):
         Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
+        predictions = self.run(x)
+        return nn.SquareLoss(predictions,y)
 
     def train(self, dataset):
         batch_size = 50
