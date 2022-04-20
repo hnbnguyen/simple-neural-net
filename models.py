@@ -78,8 +78,6 @@ class RegressionModel(object):
         self.w3 = nn.Parameter(128, 1)
         self.b3 = nn.Parameter(1, 1)
 
-        self.params = [self.w1, self.b1, self.w2, self.b2, self.w3, self.b3]
-
     def run(self, x):
         """
         Runs the model for a batch of examples.
@@ -128,6 +126,7 @@ class RegressionModel(object):
         "*** YOUR CODE HERE ***"
         batch_size = 50
         getloss = float('inf')
+        params = [self.w1, self.b1, self.w2, self.b2, self.w3, self.b3]
 
         # Benchmark of loss is 0.2
         while getloss >= 0.01:
@@ -135,15 +134,14 @@ class RegressionModel(object):
             for x, y in dataset.iterate_once(batch_size):
                 # Compute loss for the batch
                 getloss = self.get_loss(x, y)
+                # Obtain the gradient of the loss with respect to the parameters
+                gradients = nn.gradients(params, getloss)
                 # Obtain the value of the node as a scalar number
                 getloss = nn.as_scalar(getloss)
 
-                # Obtain the gradient of the loss with respect to the parameters
-                gradients = nn.gradients(self.params, getloss)
-
                 # Update the learning rate
-                for i in range(len(self.params)):
-                    self.params[i].update(-self.learning_rate, gradients[i])
+                for i in range(len(params)):
+                    params[i].update(-self.learning_rate, gradients[i])
 
 class DigitClassificationModel(object):
     """
