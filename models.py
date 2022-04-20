@@ -226,15 +226,35 @@ class DigitClassificationModel(object):
         Trains the model.
         """
         "*** YOUR CODE HERE ***"
-        batch_size = 100
-        loss = float('inf')
-        valid_acc = 0
-        while valid_acc < .98:
-            for x, y in dataset.iterate_once(batch_size):
+        
+        #Setting accuracy 
+        validAccuracy = 0
+
+        #Creating batch size
+        batchSize = 85
+
+        #Creating arbitrary loss value (to be changed)
+        loss = float(1000000)
+
+        #iterate until sufficient accuracy 
+        while validAccuracy < .98:
+
+            #getting x and y values to determine loss 
+            for x, y in dataset.iterate_once(batchSize):
+
+                #operations
                 loss = self.get_loss(x, y)
+                #determining gradient loss
                 grads = nn.gradients(self.params, loss)
+                #geting as a scalar
                 loss = nn.as_scalar(loss)
+
+                #iterating over the parameters
                 for i in range(len(self.params)):
+
+                    #updating the parameters 
                     self.params[i].update(-self.learning_rate, grads[i])
-            valid_acc = dataset.get_validation_accuracy()
+
+            #calculating accurary
+            validAccuracy = dataset.get_validation_accuracy()
 
