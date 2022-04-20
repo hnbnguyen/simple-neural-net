@@ -236,15 +236,17 @@ class DigitClassificationModel(object):
         Trains the model.
         """
         "*** YOUR CODE HERE ***"
+        #getting the params
+        params = [self.w1, self.b1, self.w2, self.b2, self.w3, self.b3, self.w4, self.b4]
         
         #Setting accuracy 
         validAccuracy = 0
 
         #Creating batch size
-        batchSize = 85
+        batchSize = 100
 
         #Creating arbitrary loss value (to be changed)
-        loss = float(1000000)
+        loss = float('inf')
 
         #iterate until sufficient accuracy 
         while validAccuracy < .98:
@@ -255,15 +257,15 @@ class DigitClassificationModel(object):
                 #operations
                 loss = self.get_loss(x, y)
                 #determining gradient loss
-                grads = nn.gradients(self.params, loss)
+                grads = nn.gradients(params, loss)
                 #geting as a scalar
                 loss = nn.as_scalar(loss)
 
                 #iterating over the parameters
-                for i in range(len(self.params)):
+                for i in range(len(params)):
 
                     #updating the parameters 
-                    self.params[i].update(-self.learning_rate, grads[i])
+                    params[i].update(-self.learning_rate, grads[i])
 
             #calculating accurary
             validAccuracy = dataset.get_validation_accuracy()
