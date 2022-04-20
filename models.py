@@ -122,18 +122,28 @@ class RegressionModel(object):
         return nn.SquareLoss(predictions,y)
 
     def train(self, dataset):
-        # THIS MUST BE CHANGED !!! 
+        """
+        Trains the model.
+        """
+        "*** YOUR CODE HERE ***"
         batch_size = 50
+        getloss = float('inf')
 
-        loss = float('inf')
-        while loss >= .01:
+        # Benchmark of loss is 0.2
+        while getloss >= 0.01:
+            # For each component in the node 
             for x, y in dataset.iterate_once(batch_size):
-                loss = self.get_loss(x, y)
-                grads = nn.gradients(self.params, loss)
-                loss = nn.as_scalar(loss)
+                # Compute loss for the batch
+                getloss = self.get_loss(x, y)
+                # Obtain the value of the node as a scalar number
+                getloss = nn.as_scalar(getloss)
+
+                # Obtain the gradient of the loss with respect to the parameters
+                gradients = nn.gradients(self.params, getloss)
+
+                # Update the learning rate
                 for i in range(len(self.params)):
-                    self.params[i].update(-self.learning_rate, grads[i])
-        # THIS MUST BE CHANGED !!! 
+                    self.params[i].update(-self.learning_rate, gradients[i])
 
 class DigitClassificationModel(object):
     """
